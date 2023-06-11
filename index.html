@@ -1,34 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Play</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 20px 40px;
+            font-size: 3rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
     <script>
-        function redirectToAppRU() {
-            window.location.href = 'upgetword://?word=6054-9621-8165-5695-9621';
-            var appWindow = window.open('upgetword://', '_blank');
-            if (!appWindow || appWindow.closed || typeof appWindow.closed === 'undefined') {
-                window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        function redirectToApp() {
+            var word = getParameterByName('word', window.location.href);
+            if (word) {
+                var appUrl = 'upgetword://?word=' + word;
+                window.location.href = appUrl;
+                var appWindow = window.open(appUrl);
+                if (!appWindow || appWindow.closed || typeof appWindow.closed === 'undefined') {
+                    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                    if (/android/i.test(userAgent)) {
+                        window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword&word=' + word;
+                    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                        // window.location.href = 'https://apps.apple.com/app/idYOUR_APP_ID?word=' + word;
+                    } else {
+                        window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword&word=' + word;
+                    }
+                }
+            } else {
+                var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                if (/android/i.test(userAgent)) {
+                    window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
+                } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    //window.location.href = 'https://apps.apple.com/app/idYOUR_APP_ID';
+                    window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
+                } else {
+                    window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
+                }
             }
         }
-        function redirectToAppENG() {
-            window.location.href = 'upgetword://?word=4867-8076-5504-4867-8076';
-            var appWindow = window.open('upgetword://', '_blank');
-            if (!appWindow || appWindow.closed || typeof appWindow.closed === 'undefined') {
-                window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
-            }
-        }
+        redirectToApp();
     </script>
 </head>
 <body>
-<center>
-<br>
-<br>
-    <button style="font-size:6vh; cursor: pointer;" onclick="redirectToAppRU()">Слово RU</button>
-<br>
-<br>
-<br>
-<br>
-    <button style="font-size:6vh; cursor: pointer;" onclick="redirectToAppENG()">Слово ENG</button>
-</center>
+    <div class="container">
+        <button class="button" onclick="redirectToApp()">Play</button>
+    </div>
 </body>
 </html>
