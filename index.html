@@ -1,1 +1,34 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script>
+        function redirectToAppRU() {
+            window.location.href = 'upgetword://?word=6054-9621-8165-5695-9621';
+            var appWindow = window.open('upgetword://', '_blank');
+            if (!appWindow || appWindow.closed || typeof appWindow.closed === 'undefined') {
+                window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
+            }
+        }
+        function redirectToAppENG() {
+            window.location.href = 'upgetword://?word=4867-8076-5504-4867-8076';
+            var appWindow = window.open('upgetword://', '_blank');
+            if (!appWindow || appWindow.closed || typeof appWindow.closed === 'undefined') {
+                window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
+            }
+        }
+    </script>
+</head>
+<body>
+<center>
+<br>
+<br>
+    <button style="font-size:6vh; cursor: pointer;" onclick="redirectToAppRU()">Слово RU</button>
+<br>
+<br>
+<br>
+<br>
+    <button style="font-size:6vh; cursor: pointer;" onclick="redirectToAppENG()">Слово ENG</button>
+</center>
+</body>
+</html>
