@@ -1,83 +1,88 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Play</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-        body {
-            background-color: #f5f5f5;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .button {
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            padding: 20px 40px;
-            font-size: 3rem;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-    </style>
-    <script>
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, '\\$&');
-            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
-
-        function redirectToApp() {
-            var word = getParameterByName('word', window.location.href);
-            if (word) {
-                var appUrl = 'upgetword://?word=' + word;
-                window.location.href = appUrl;
-                var appWindow = window.open(appUrl);
-                if (!appWindow || appWindow.closed || typeof appWindow.closed === 'undefined') {
-                    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                    if (/android/i.test(userAgent)) {
-                        window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword&word=' + word;
-                    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                        // window.location.href = 'https://apps.apple.com/app/idYOUR_APP_ID?word=' + word;
-                    } else {
-                        window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword&word=' + word;
-                    }
-                }
-            } else {
-                var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                if (/android/i.test(userAgent)) {
-                    window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
-                } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                    //window.location.href = 'https://apps.apple.com/app/idYOUR_APP_ID';
-                    window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
-                } else {
-                    window.location.href = 'https://play.google.com/store/apps/details?id=uralpro.getword';
-                }
-            }
-        }
-        redirectToApp();
-    </script>
+  <title>Play</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    .button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 20px 40px;
+      font-size: 3rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <button class="button" onclick="redirectToApp()">Play</button>
-    </div>
+  <div class="container">
+    <button class="button" onclick="play(1)">Play</button>
+  </div>
+
+  <script>
+    function openAppWithParams(appLink, appStoreLink, params, l) {
+      if (l == 1) {
+        window.location.href = appStoreLink + "&word=" + encodeURIComponent(params);
+      } else {
+        window.location.href = appLink + "?word=" + encodeURIComponent(params);
+        setTimeout(function() {
+          window.location.href = appStoreLink + "&word=" + encodeURIComponent(params);
+        }, 3000);
+      }
+    }
+
+    function getParamsFromURL(url) {
+      var params = {};
+      var queryString = url.split('?')[1];
+      if (queryString) {
+        var paramPairs = queryString.split('&');
+        for (var i = 0; i < paramPairs.length; i++) {
+          var pair = paramPairs[i].split('=');
+          var key = decodeURIComponent(pair[0]);
+          var value = decodeURIComponent(pair[1]);
+          params[key] = value;
+        }
+      }
+      return params;
+    }
+
+    function getWordParamFromURL(url) {
+      var params = getParamsFromURL(url);
+      return params.word || '';
+    }
+    var currentURL = window.location.href;
+    var appLink = "upgetword://";
+    var appStoreLink = "https://play.google.com/store/apps/details?id=uralpro.getword";
+
+    function play(l) {
+      var wordParam = getWordParamFromURL(currentURL);
+      openAppWithParams(appLink, appStoreLink, wordParam, l);
+    }
+    play(0);
+  </script>
+
 </body>
+
 </html>
